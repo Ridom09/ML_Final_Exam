@@ -11,30 +11,25 @@ from sklearn.ensemble import RandomForestClassifier
 df = pd.read_csv("diabetes.csv")
 
 # Data Preprocessing
-# Replace zeros with NaN for specific columns
 cols_with_zero = ['Glucose', 'BloodPressure', 'SkinThickness', 'Insulin', 'BMI']
 df[cols_with_zero] = df[cols_with_zero].replace(0, np.nan)
 
-# Fill missing values with median
 df.fillna(df.median(), inplace=True)
-
-# Split features and target
 X = df.drop('Outcome', axis=1)
 y = df['Outcome']
 
-# Outlier Handling (IQR method)
 Q1 = X.quantile(0.25)
 Q3 = X.quantile(0.75)
 IQR = Q3 - Q1
 X = X[~((X < (Q1 - 1.5 * IQR)) | (X > (Q3 + 1.5 * IQR))).any(axis=1)]
 y = y[X.index]
 
-# Split into train/test
+
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42, stratify=y
 )
 
-# Define Pipeline with RandomForestClassifier
+# Pipeline 
 rf_pipeline = Pipeline([
     ('scaler', StandardScaler()),
     ('model', RandomForestClassifier(
@@ -45,10 +40,10 @@ rf_pipeline = Pipeline([
     ))
 ])
 
-# Train the model
+# Model Training 
 rf_pipeline.fit(X_train, y_train)
 
-# Save the trained pipeline
+# Saving the model
 with open("Diabetes_rf_pipeline.pkl", "wb") as f:
     pickle.dump(rf_pipeline, f)
 
