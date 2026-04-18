@@ -9,7 +9,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report, accuracy_score
 
 # 1. Data Loading
-df = pd.read_csv("diabetes.csv")
+df = pd.read_csv("/content/diabetes.cs")
 print("Shape:", df.shape)
 print(df.head())
 
